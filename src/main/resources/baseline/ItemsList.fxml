@@ -38,7 +38,16 @@
                   <Insets left="52.0" />
                </padding>
             </HBox>
-            <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addNewItem" text="Add Item" />
+            <HBox alignment="CENTER" spacing="48.0">
+               <children>
+                  <Button fx:id="importFileButton" mnemonicParsing="false" onAction="#ImportFromFile" text="Import From File" />
+                  <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addNewItem" text="Add Item" />
+                  <Button fx:id="exportFileButton" mnemonicParsing="false" onAction="#ExportToFile" text="Export To File" />
+               </children>
+               <padding>
+                  <Insets right="12.0" />
+               </padding>
+            </HBox>
             <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeList" text="Close" />
          </children>
          <padding>
@@ -52,19 +61,19 @@
                   <VBox alignment="CENTER">
                      <children>
                         <Label text="Item Name" />
-                        <TextField fx:id="ItemNameTextField" editable="false" />
+                        <TextField fx:id="itemNameTextField" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER">
                      <children>
                         <Label text="Date" />
-                        <TextField fx:id="ItemDateTextField" editable="false" />
+                        <TextField fx:id="itemDateTextField" />
                      </children>
                   </VBox>
                </children>
             </HBox>
             <Label text="Description" />
-            <TextArea fx:id="ItemDescriptionTextField" editable="false" prefHeight="200.0" prefWidth="298.0" />
+            <TextArea fx:id="itemDescriptionTextField" prefHeight="200.0" prefWidth="298.0" />
          </children>
          <opaqueInsets>
             <Insets />

@@ -15,6 +15,24 @@ public class ItemList {
 
     public void addItem(String newItemName, String newDescription, String newDate) {
         //use name to add item from arraylist
+        toDoList.add(new Item(newItemName, newDescription, newDate, false));
+    }
+
+    public Item getItem(String name) {
+        for (Item item : toDoList) {
+            if (item.getItemName().equals(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public void setItemCompletedState(String name, boolean state) {
+        for (Item item : toDoList) {
+            if (item.getItemName().equals(name)) {
+                item.setCompleted(state);
+            }
+        }
     }
 
     public void removeItem(String name) {
@@ -23,6 +41,13 @@ public class ItemList {
 
     public void editItem(String name, String newItemName, String newDescription, String newDate) {
         //use name to find specific item and use setter methods of class Item to change info of the item
+        for (Item item : toDoList) {
+            if (item.getItemName().equals(name)) {
+                item.setItemName(newItemName);
+                item.setItemDescription(newDescription);
+                item.setDueDate(newDate);
+            }
+        }
     }
 
     public void toggleCompleted(String name) {

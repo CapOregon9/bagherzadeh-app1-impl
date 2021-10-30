@@ -15,6 +15,9 @@ public class ToDoLists {
     public ItemList getList(String name) {
         for (ItemList list: allLists) {
             //uses passed in name to get item list
+            if (list.getListName().equals(name)) {
+                return list;
+            }
         }
         return null;
     }
@@ -32,5 +35,6 @@ public class ToDoLists {
     public void addList(String name) {
         //add list from all lists
         //uses passed in list name in Item List instance call
+        allLists.add(new ItemList(name));
     }
 }

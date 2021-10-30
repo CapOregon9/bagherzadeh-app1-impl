@@ -7,7 +7,7 @@ public class Item {
     private String itemDescription;
     private boolean completed;
 
-    public Item(String itemName, String dueDate, String itemDescription, boolean completed) {
+    public Item(String itemName, String itemDescription, String dueDate, boolean completed) {
         //initializes info when new item is added
         this.itemName = itemName;
         this.dueDate = dueDate;

@@ -1,13 +1,18 @@
 package baseline;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 
 public class ApplicationController {
-    private ToDoLists toDoLists;
+    private ToDoLists toDoLists = new ToDoLists();
+
+    private final ObservableList<ItemList> lists = FXCollections.observableArrayList();
 
     @FXML
     private Button addListButton;
@@ -25,7 +30,7 @@ public class ApplicationController {
     private Button removeListButton;
 
     @FXML
-    private ListView<?> toDoListView;
+    private ListView<ItemList> toDoListView;
 
     @FXML
     void ExportListsToFile(ActionEvent event) {
@@ -41,6 +46,9 @@ public class ApplicationController {
         //call method to add a new to-do list
         //send title as parameter
         //update listView
+        toDoLists.addList(listTitleTextField.getText());
+        lists.add(toDoLists.getList(listTitleTextField.getText()));
+        toDoListView.setItems(lists);
     }
 
     @FXML
@@ -56,11 +64,23 @@ public class ApplicationController {
     @FXML
     void removeListFromListView(ActionEvent event) {
         //check name and call function to remove list from arrayList of all lists
+        lists.remove(toDoLists.getList(listTitleTextField.getText()));
+        toDoLists.removeList(listTitleTextField.getText());
+        toDoListView.setItems(lists);
     }
 
     public void initialize() {
         //use this section to add listener a listener to the listView so that you can detect what is selected
         //initialize what is in the listView as well
         //use list of all lists to initialize an observation list for listView
+
+        lists.addAll(toDoLists.getAllLists());
+        toDoListView.setItems(lists);
+
+        toDoListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        toDoListView.getSelectionModel().selectedItemProperty().addListener(
+                (ov, oldValue, newValue) -> listTitleTextField.setText(newValue.toString())
+        );
     }
 }
