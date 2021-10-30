@@ -1,0 +1,152 @@
+@startuml
+
+Application -- ApplicationController
+ApplicationController -- ItemListController
+ItemListController -- AddItemController
+ItemListController -- EditItemController
+ApplicationController -- ExportFileController
+ApplicationController -- ImportFileController
+ApplicationController -- ToDoLists
+ItemListController -- ToDoLists
+AddItemController -- ToDoLists
+EditItemController -- ToDoLists
+ExportFileController -- ToDoLists
+ImportFileController -- ToDoLists
+
+ToDoLists -- ItemList
+ItemList -- Item
+
+class Application {
+    main(String[])
+    void: start(Stage)
+    Parent: root
+    Scene: scene
+}
+
+class ToDoLists {
+-List<ItemList>: allLists
+
++List<ItemList>: getAllLists()
++void: setAllLists(List<ItemList>)
++void: getList(String)
++void: removeList(String)
++void: addList(String)
+}
+
+class ItemList {
+-String: listName
+-ArrayList<Item>: toDoList
+
++ItemList(String)
++void: addItem(String,String,String)
++void removeItem(String)
++void: editItem(String,String,String,String)
++void: toggleCompleted(String)
++String: getListName()
++void: setListName(String)
++List<Item>: getToDoList()
++void: setToDoList(List<Item>)
++String: toString()
+}
+
+class Item {
+-String: itemName
+-String: dueDate
+-String: itemDescription
+-boolean: completed
+
++Item(String String,String,boolean)
+
++String: getItemName()
++void: setItemName(String)
++String: getDueDate()
++void: setItemDescription(String)
++boolean: getCompleted()
++void: setCompleted(boolean)
+
++String: toString()
+}
+
+class ApplicationController {
+-ToDoLists: toDoLists;
+-Button: addListButton;
+-Button: checkAllItemsButton;
+-Button: exportListsButton;
+-TextField: listTitleTextField;
+-Button: removeListButton;
+-ListView<?>: toDoListView;
+
++void: ExportListsToFile(ActionEvent)
++void: addListToListView(ActionEvent)
++void: checkItemsFromList(ActionEvent)
++void: loadDataFromFile(ActionEvent)
++void: removeListFromListView(ActionEvent)
++void: initialize()
+}
+
+class ItemListController {
+-TextField: ItemDateTextField
+-TextArea: ItemDescriptionTextField
+-TextField: ItemNameTextField
+-Button: addItemButton
+-Button: closeButton
+-CheckBox: completedCheckBox
+-ToggleGroup: completedToggleGroup
+-Button: editSelectedItemButton
+-ListView<?>: itemsListView
+-Button: removeSelectedItemButton
+-RadioButton: showAllItemsRadioButton
+-RadioButton: showCompleteItemsRadioButton
+-RadioButton: showIncompleteItemsRadioButton
+
++void: addNewItem(ActionEvent)
++void changeCompletedState(ActionEvent)
++void: closeList(ActionEvent)
++void: editSelectedItem(ActionEvent)
++void: removeSelectedItem(ActionEvent)
++void: selectItemsToShow(ActionEvent)
++void: initialize()
+}
+
+class AddItemController {
+-ToDoLists: toDoLists
+-String: listName
+-String: itemName
+-TextField: newDateTextField
+-TextArea: newDescriptionTextField
+-TextField: newNameTextField
+-Button: saveItemButton
+
++void: editItemValues(ActionEvent)
++void: initialize()
+}
+
+class EditItemController {
+-ToDoLists: toDoLists
+-String: listName
+-String: itemName
+-TextField: newDateTextField
+-TextArea: newDescriptionTextField
+-TextField: newNameTextField
+-Button: saveChangesButton
+
++void: editItemValues(ActionEvent)
++void: initialize()
+}
+
+class ExportFileController {
+-TextField: fileLocationTextField
+-TextField: fileNameTextField
+-Button: saveButton
+
++void: saveFile(ActionEvent)
+}
+
+class ImportFileController {
+-TextField: fileLocationTextField
+-TextField: fileNameTextField
+-Button: loadFileButton
+
++void: openFile(ActionEvent)
+}
+@enduml
