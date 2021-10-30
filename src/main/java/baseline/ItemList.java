@@ -8,9 +8,8 @@ public class ItemList {
     private String listName;
     List<Item> toDoList = new ArrayList<>();
 
-    public ItemList(String listName) {
-        //initialized name when new list is added
-        this.listName = listName;
+    public ItemList() {
+        //initialized  when new list is made
     }
 
     public void addItem(String newItemName, String newDescription, String newDate) {

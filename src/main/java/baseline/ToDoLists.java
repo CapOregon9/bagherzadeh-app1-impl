@@ -35,6 +35,6 @@ public class ToDoLists {
     public void addList(String name) {
         //add list from all lists
         //uses passed in list name in Item List instance call
-        allLists.add(new ItemList(name));
+        allLists.add(new ItemList());
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 
 public class EditItemController {
 
+    private ItemList itemList;
     private ToDoLists toDoLists;
     private String listName;
     private String itemName;
@@ -24,10 +25,17 @@ public class EditItemController {
     @FXML
     private Button saveChangesButton;
 
+    public EditItemController(ItemList itemList, String itemName) {
+        this.itemList = itemList;
+        this.itemName = itemName;
+    }
+
     @FXML
     void editItemValues(ActionEvent event) {
         //cycle through list to get the specific list
         //call function to edit item
+        itemList.editItem(itemName ,newNameTextField.getText(), newDescriptionTextField.getText(), newDateTextField.getText());
+        //return list to main scene and load main scene with scene manager
     }
 
     public void initialize() {

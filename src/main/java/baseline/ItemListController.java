@@ -14,7 +14,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 public class ItemListController {
-    private ItemList itemList = new ItemList("itemList");
+    private ItemList itemList = new ItemList();
     Stage stage;
     private final ObservableList<Item> list = FXCollections.observableArrayList();
 

@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 
 public class AddItemController {
 
-    private ToDoLists toDoLists;
+    private ItemList itemList;
     private String listName;
     private String itemName;
 
@@ -24,15 +24,22 @@ public class AddItemController {
     @FXML
     private Button saveItemButton;
 
+    public AddItemController(ItemList itemList) {
+        this.itemList = itemList;
+    }
+
     @FXML
-    void editItemValues(ActionEvent event) {
+    void saveItem(ActionEvent event) {
         //cycle through list to get the specific list
         //call function to add item
+        itemList.addItem(newNameTextField.getText(), newDescriptionTextField.getText(), newDateTextField.getText());
+        //return itemlist to main scene and load main scene with scene manager
     }
 
     public void initialize() {
         //store passed in object of all lists
         //store listname and item name as well
+
     }
 
 }

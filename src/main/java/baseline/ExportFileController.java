@@ -5,7 +5,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.io.FileNotFoundException;
+import java.util.Formatter;
+import java.util.FormatterClosedException;
+
 public class ExportFileController {
+
+    private ItemList itemList;
 
     @FXML
     private TextField fileLocationTextField;
@@ -16,10 +22,25 @@ public class ExportFileController {
     @FXML
     private Button saveButton;
 
+    public ExportFileController(ItemList itemList) {
+        this.itemList = itemList;
+    }
+
     @FXML
     void saveFile(ActionEvent event) {
-        //create JSON file from objects storing list information
+        //create text file from the todolist information
         //use the list passed over to know what objects to save
+        for (Item item:itemList.getToDoList()) {
+            try (Formatter output = new Formatter(String.format("%s\\%s.txt", fileLocationTextField.getText(), fileNameTextField.getText()))) {
+                saveLineToFile(item, output);
+            } catch (SecurityException | FileNotFoundException | FormatterClosedException e) {
+                System.out.println("Could not write file.");
+            }
+        }
+    }
+
+    public void saveLineToFile(Item item, Formatter output) {
+        output.format("%s %s %s", item.getItemName(), item.getItemDescription(), item.getDueDate());
     }
 
 }
