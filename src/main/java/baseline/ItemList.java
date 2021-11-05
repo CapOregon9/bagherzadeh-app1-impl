@@ -27,6 +27,9 @@ public class ItemList {
     }
 
     public void setItemCompletedState(String name, boolean state) {
+        //another form of setMethod
+        //uses name to find item
+        //toggle value of completed with get and set methods of it
         for (Item item : toDoList) {
             if (item.getItemName().equals(name)) {
                 item.setCompleted(state);
@@ -47,12 +50,6 @@ public class ItemList {
                 item.setDueDate(newDate);
             }
         }
-    }
-
-    public void toggleCompleted(String name) {
-        //another form of setMethod
-        //uses name to find item
-        //toggle value of completed with get and set methods of it
     }
 
     //used to access info for controllers

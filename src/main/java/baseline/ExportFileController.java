@@ -40,7 +40,11 @@ public class ExportFileController {
     }
 
     public void saveLineToFile(Item item, Formatter output) {
-        output.format("%s %s %s", item.getItemName(), item.getItemDescription(), item.getDueDate());
+        int tempComplete = 0;
+        if (item.getCompleted()){
+            tempComplete = 1;
+        }
+        output.format("%s %s %s %d", item.getItemName(), item.getItemDescription(), item.getDueDate(), tempComplete);
     }
 
 }

@@ -4,6 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
@@ -12,6 +16,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ItemListController {
     private ItemList itemList = new ItemList();
@@ -63,12 +69,9 @@ public class ItemListController {
     @FXML
     private Button importFileButton;
 
-    public ItemListController() {
-
-    }
-
-    public ItemListController(ItemList itemList) {
+    public void itemListDataPass(ItemList itemList) {
         this.itemList = itemList;
+        fillListView();
     }
 
     @FXML
@@ -85,9 +88,24 @@ public class ItemListController {
     void addNewItem(ActionEvent event) {
         //move to add item scene passing over all lists as well
         //pass in value for the selected item as well as the selected list
-        itemList.addItem(itemNameTextField.getText(), itemDescriptionTextField.getText(), itemDateTextField.getText());
-        list.add(itemList.getItem(itemNameTextField.getText()));
-        itemsListView.setItems(list);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddItem.fxml"));
+
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            System.out.println("Could not load add item fxml.");
+        }
+        AddItemController controller = fxmlLoader.getController();
+        controller.itemListDataPass(itemList);
+        Scene scene = new Scene(root);
+        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+
+      //  itemList.addItem(itemNameTextField.getText(), itemDescriptionTextField.getText(), itemDateTextField.getText());
+      //  list.add(itemList.getItem(itemNameTextField.getText()));
+      //  itemsListView.setItems(list);
     }
 
     @FXML
@@ -111,10 +129,27 @@ public class ItemListController {
     void editSelectedItem(ActionEvent event) {
         //move to edit item scene passing over all lists as well
         //pass in value for the selected item as well as the selected list
-        itemList.editItem(itemsListView.getSelectionModel().getSelectedItem().getItemName() ,itemNameTextField.getText(), itemDescriptionTextField.getText(), itemDateTextField.getText());
-        list.clear();
-        list.addAll(itemList.getToDoList());
-        itemsListView.setItems(list);
+        if (!itemsListView.getSelectionModel().isEmpty()) {
+            String itemName = itemsListView.getSelectionModel().getSelectedItem().getItemName();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditItem.fxml"));
+
+            Parent root = null;
+            try {
+                root = fxmlLoader.load();
+            } catch (IOException e) {
+                System.out.println("Could not load add item fxml.");
+            }
+            EditItemController controller = fxmlLoader.getController();
+            controller.itemListDataPass(itemList, itemName);
+            Scene scene = new Scene(root);
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        }
+        //itemList.editItem( ,itemNameTextField.getText(), itemDescriptionTextField.getText(), itemDateTextField.getText());
+        //list.clear();
+        //list.addAll(itemList.getToDoList());
+        //itemsListView.setItems(list);
     }
 
     @FXML
@@ -122,9 +157,11 @@ public class ItemListController {
         //check listener to get name of what item is selected
         //call method of itemList to remove item from list
         //update observationList and listView
-        itemList.removeItem(itemsListView.getSelectionModel().getSelectedItem().getItemName());
-        list.remove(itemsListView.getSelectionModel().getSelectedItem());
-        itemsListView.setItems(list);
+        if (!itemsListView.getSelectionModel().isEmpty()) {
+            itemList.removeItem(itemsListView.getSelectionModel().getSelectedItem().getItemName());
+            list.remove(itemsListView.getSelectionModel().getSelectedItem());
+            itemsListView.setItems(list);
+        }
     }
 
     @FXML
@@ -145,6 +182,7 @@ public class ItemListController {
                     list.add(item);
                 }
             }
+            itemsListView.setItems(list);
         } else {
             list.clear();
             for (Item item : itemList.getToDoList()) {
@@ -152,6 +190,7 @@ public class ItemListController {
                     list.add(item);
                 }
             }
+            itemsListView.setItems(list);
         }
 
     }
@@ -163,13 +202,7 @@ public class ItemListController {
         showCompleteItemsRadioButton.setUserData(new Item("", "", "", true));
         showIncompleteItemsRadioButton.setUserData(new Item("", "", "", false));
 
-
-        itemList.addItem("Item1", "Description1", "01-DD-YYYY");
-        itemList.addItem("Item2", "Description2", "02-DD-YYYY");
-        itemList.addItem("Item3", "Description3", "03-DD-YYYY");
-
-        list.addAll(itemList.getToDoList());
-        itemsListView.setItems(list);
+        fillListView();
 
         itemsListView.getSelectionModel().selectedItemProperty().addListener(
                 (ov, oldValue, newValue) -> {
@@ -179,4 +212,11 @@ public class ItemListController {
                     completedCheckBox.setSelected(newValue.getCompleted());
                 });
     }
+
+    public void fillListView() {
+        list.addAll(itemList.getToDoList());
+        itemsListView.setItems(list);
+    }
+
+
 }

@@ -29,13 +29,18 @@ public class ImportFileController {
 
     @FXML
     void openFile(ActionEvent event) {
-        //use JSON file to make objects of list information
+        //use text file to make objects of list information
+        int tempComplete;
+        String tempName;
         itemList = new ItemList();
         try (Scanner inputLine = new Scanner(Paths.get(String.format("%s\\%s.txt", fileLocationTextField.getText(), fileNameTextField.getText())))) {
             while (inputLine.hasNextLine()) {
                 String line = inputLine.nextLine();
                 try (Scanner inputString = new Scanner(line)) {
-                    itemList.addItem(inputString.next(), inputString.next(), inputString.next());
+                    tempName = inputString.next();
+                    itemList.addItem(tempName, inputString.next(), inputString.next());
+                    tempComplete = Integer.parseInt(inputString.next());
+                    itemList.setItemCompletedState(tempName, tempComplete == 1);
                 }
             }
         } catch (IOException | NoSuchElementException | IllegalStateException e) {
