@@ -37,6 +37,15 @@ public class ItemList {
         }
     }
 
+    public boolean itemExists(String itemName) {
+        for (Item item : toDoList) {
+            if (item.getItemName().equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void removeItem(String name) {
         //use name to remove item from arraylist
     }
@@ -50,6 +59,10 @@ public class ItemList {
                 item.setDueDate(newDate);
             }
         }
+    }
+
+    public void clearAllItems() {
+        toDoList.clear();
     }
 
     //used to access info for controllers
