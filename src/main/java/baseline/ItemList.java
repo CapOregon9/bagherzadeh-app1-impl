@@ -48,6 +48,7 @@ public class ItemList {
 
     public void removeItem(String name) {
         //use name to remove item from arraylist
+        toDoList.removeIf(item -> item.getItemName().equals(name));
     }
 
     public void editItem(String name, String newItemName, String newDescription, String newDate) {

@@ -93,7 +93,9 @@ public class ItemListController {
         fileChooser.setTitle("Save File");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File file = fileChooser.showSaveDialog(stage);
-        saveFile(file.toString());
+        if (file != null) {
+            saveFile(file.toString());
+        }
     }
 
     @FXML
@@ -104,8 +106,6 @@ public class ItemListController {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             openFile(file);
-            list.clear();
-            fillListView();
         }
     }
 
@@ -139,12 +139,12 @@ public class ItemListController {
     void changeCompletedState(ActionEvent event) {
          //toggle completed for item using method
          //update observation list and ListView
-        if (!itemsListView.getSelectionModel().isEmpty()) {
-            itemList.setItemCompletedState(itemsListView.getSelectionModel().getSelectedItem().getItemName(), completedCheckBox.isSelected());
-            list.clear();
-            list.addAll(itemList.getToDoList());
+            if (!itemsListView.getSelectionModel().isEmpty()) {
+                itemList.setItemCompletedState(itemsListView.getSelectionModel().getSelectedItem().getItemName(), completedCheckBox.isSelected());
+                list.clear();
+                list.addAll(itemList.getToDoList());
 
-        }
+            }
     }
 
     @FXML
@@ -177,10 +177,6 @@ public class ItemListController {
             stage.setScene(scene);
             stage.show();
         }
-        //itemList.editItem( ,itemNameTextField.getText(), itemDescriptionTextField.getText(), itemDateTextField.getText());
-        //list.clear();
-        //list.addAll(itemList.getToDoList());
-        //itemsListView.setItems(list);
     }
 
     @FXML
@@ -201,29 +197,42 @@ public class ItemListController {
         //radio buttons will give a value 0, 1, or 2
         //compare that value with the completed value of each item
         //update listView
-        if (completedToggleGroup.getSelectedToggle().getUserData().equals("All")){
-            list.clear();
-            list.addAll(itemList.getToDoList());
-
-        }
-        else if (completedToggleGroup.getSelectedToggle().getUserData().equals("Completed")) {
-            list.clear();
-            for (Item item : itemList.getToDoList()) {
-                if (item.getCompleted()) {
-                    list.add(item);
-                }
+            if (completedToggleGroup.getSelectedToggle().getUserData().equals("All")){
+                showAllItems();
             }
-
-        } else {
-            list.clear();
-            for (Item item : itemList.getToDoList()) {
-                if (!item.getCompleted()) {
-                    list.add(item);
-                }
+            else if (completedToggleGroup.getSelectedToggle().getUserData().equals("Completed")) {
+                showCompletedItems();
+            } else {
+                showIncompleteItems();
             }
+    }
 
+    public void showIncompleteItems() {
+        list.clear();
+        for (Item item : itemList.getToDoList()) {
+            if (!item.getCompleted()) {
+                list.add(item);
+            }
         }
+    }
 
+    public void showCompletedItems() {
+        list.clear();
+        for (Item item : itemList.getToDoList()) {
+            if (item.getCompleted()) {
+                list.add(item);
+            }
+        }
+    }
+
+    public void showAllItems() {
+        list.clear();
+        list.addAll(itemList.getToDoList());
+    }
+
+    public ObservableList<Item> getList() {
+        //used for junit testing
+        return this.list;
     }
 
     @FXML
@@ -247,10 +256,12 @@ public class ItemListController {
 
         itemsListView.getSelectionModel().selectedItemProperty().addListener(
                 (ov, oldValue, newValue) -> {
-                    itemNameTextField.setText(newValue.getItemName());
-                    itemDescriptionTextField.setText(newValue.getItemDescription());
-                    itemDateTextField.setText(newValue.getDueDate());
-                    completedCheckBox.setSelected(newValue.getCompleted());
+                    if (!itemsListView.getSelectionModel().isEmpty()) {
+                        itemNameTextField.setText(newValue.getItemName());
+                        itemDescriptionTextField.setText(newValue.getItemDescription());
+                        itemDateTextField.setText(newValue.getDueDate());
+                        completedCheckBox.setSelected(newValue.getCompleted());
+                    }
                 });
     }
 
@@ -276,6 +287,8 @@ public class ItemListController {
         } catch (NoSuchElementException | IllegalStateException | FileNotFoundException e) {
             System.out.println("Could not read file.");
         }
+        list.clear();
+        fillListView();
     }
 
     public void saveFile(String fileURI) {

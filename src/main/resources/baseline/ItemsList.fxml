@@ -61,19 +61,19 @@
                   <VBox alignment="CENTER" spacing="8.0">
                      <children>
                         <Label text="Item Name" />
-                        <TextField fx:id="itemNameTextField" />
+                        <TextField fx:id="itemNameTextField" editable="false" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" spacing="8.0">
                      <children>
                         <Label text="Date" />
-                        <TextField fx:id="itemDateTextField" />
+                        <TextField fx:id="itemDateTextField" editable="false" />
                      </children>
                   </VBox>
                </children>
             </HBox>
             <Label text="Description" />
-            <TextArea fx:id="itemDescriptionTextField" prefHeight="200.0" prefWidth="298.0">
+            <TextArea fx:id="itemDescriptionTextField" editable="false" prefHeight="200.0" prefWidth="298.0" wrapText="true">
                <opaqueInsets>
                   <Insets bottom="8.0" />
                </opaqueInsets></TextArea>

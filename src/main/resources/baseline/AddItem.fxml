@@ -28,7 +28,7 @@
          </children>
       </HBox>
       <Label text="Description" />
-      <TextArea fx:id="newDescriptionTextField" prefHeight="200.0" prefWidth="200.0" />
+      <TextArea fx:id="newDescriptionTextField" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
       <Button fx:id="saveItemButton" mnemonicParsing="false" onAction="#saveItem" text="Save Item" />
    </children>
    <padding>
