@@ -29,7 +29,8 @@ public class ListFont extends javafx.scene.control.ListCell<Item> {
         hBox.getChildren().add(vBoxComplete);
         vBoxComplete.setPrefWidth(128);
         vBoxDate.setPrefWidth(64);
-        vBoxName.setPrefWidth(64);
+        vBoxName.setPrefWidth(80);
+        vBoxName.setMaxWidth(80);
     }
 
     @Override
