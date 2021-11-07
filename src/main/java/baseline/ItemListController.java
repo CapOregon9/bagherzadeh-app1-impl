@@ -91,7 +91,6 @@ public class ItemListController {
 
     private HostServices hostServices;
 
-    private Hyperlink hyperlink;
 
     public void itemListDataPass(ItemList itemList, HostServices hostServices) {
         //Receive the item list from another controller object (either edit item or add item controller)
