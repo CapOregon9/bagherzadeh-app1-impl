@@ -23,7 +23,6 @@ import jfxtras.styles.jmetro.Style;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class EditItemController {
     //create item list and item name to store the information passed in which is used in multiple methods
@@ -54,25 +53,9 @@ public class EditItemController {
         //four boolean methods used to validate input from the user: 1. Name field not empty 2. Name field Unique 3. Description field not empty 4. Description field <= 256 in length
         //if these are all true, then the item list edit item method is called to edit the current item
         if (!isNameFieldEmpty(newNameTextField.getText()) && isNameFieldUnique(newNameTextField.getText()) && !isDescriptionFieldEmpty(newDescriptionTextField.getText()) && descriptionFieldMaxValidation(newDescriptionTextField.getText())) {
-            Stage stage;
             itemList.editItem(itemName, newNameTextField.getText(), newDescriptionTextField.getText(), newDatePickerField.getValue().format(DateTimeFormatter.ISO_DATE));
             //Transition back to main scene as well as sending the item list data back to it.
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemsList.fxml"));
-
-            Parent root = null;
-            try {
-                root = fxmlLoader.load();
-            } catch (IOException e) {
-                System.out.println("Could not load add item fxml.");
-            }
-            ItemListController controller = fxmlLoader.getController();
-            controller.itemListDataPass(itemList);
-            Scene scene = new Scene(root);
-            JMetro jMetro = new JMetro(Style.LIGHT);
-            jMetro.setScene(scene);
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+            transitionToItemList(event);
         } else {
             if (isNameFieldEmpty(newNameTextField.getText()) || !isNameFieldUnique(newNameTextField.getText())) {
                 //clears the name text field and sets a prompt if validation for the name didn't pass
@@ -89,6 +72,26 @@ public class EditItemController {
                 newDescriptionTextField.setPromptText("Enter a valid description that is no longer than 256 characters.");
             }
         }
+    }
+
+    private void transitionToItemList(ActionEvent event) {
+        Stage stage;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemsList.fxml"));
+
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            System.out.println("Could not load add item fxml.");
+        }
+        ItemListController controller = fxmlLoader.getController();
+        controller.itemListDataPass(itemList);
+        Scene scene = new Scene(root);
+        JMetro jMetro = new JMetro(Style.LIGHT);
+        jMetro.setScene(scene);
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public boolean descriptionFieldMaxValidation(String description) {

@@ -50,7 +50,6 @@ public class AddItemController {
         //four boolean methods used to validate input from the user: 1. Name field not empty 2. Name field Unique 3. Description field not empty 4. Description field <= 256 in length
         //if these are all true, then the item list edit item method is called to edit the current item
         if (!isNameFieldEmpty(newNameTextField.getText()) && isNameFieldUnique(newNameTextField.getText()) && !isDescriptionFieldEmpty(newDescriptionTextField.getText()) && descriptionFieldMaxValidation(newDescriptionTextField.getText())) {
-            Stage stage;
             String date;
             if (newDatePickerField.getValue() == null) {
                 date = "";
@@ -59,21 +58,7 @@ public class AddItemController {
             }
             itemList.addItem(newNameTextField.getText(), newDescriptionTextField.getText(), date);
             //Transition back to main scene as well as sending the item list data back to it.
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemsList.fxml"));
-            stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-            Parent root = null;
-            try {
-                root = fxmlLoader.load();
-            } catch (IOException e) {
-                System.out.println("Could not load item list fxml.");
-            }
-            ItemListController controller = fxmlLoader.getController();
-            controller.itemListDataPass(itemList);
-            Scene scene = new Scene(root);
-            JMetro jMetro = new JMetro(Style.LIGHT);
-            jMetro.setScene(scene);
-            stage.setScene(scene);
-            stage.show();
+            transitionToItemList(event);
         } else {
             if (isNameFieldEmpty(newNameTextField.getText()) || !isNameFieldUnique(newNameTextField.getText())) {
                 //clears the name text field and sets a prompt if validation for the name didn't pass
@@ -91,6 +76,25 @@ public class AddItemController {
             }
         }
 
+    }
+
+    private void transitionToItemList(ActionEvent event) {
+        Stage stage;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemsList.fxml"));
+        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            System.out.println("Could not load item list fxml.");
+        }
+        ItemListController controller = fxmlLoader.getController();
+        controller.itemListDataPass(itemList);
+        Scene scene = new Scene(root);
+        JMetro jMetro = new JMetro(Style.LIGHT);
+        jMetro.setScene(scene);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public boolean descriptionFieldMaxValidation(String description) {

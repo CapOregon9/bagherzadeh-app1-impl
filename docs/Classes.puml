@@ -110,6 +110,7 @@ class AddItemController {
 
 +void: itemListDataPass(ItemList)
 +void: saveItem(ActionEvent)
++void: transitionToItemList(ActionEvent)
 +boolean: descriptionFieldMaxValidation(String)
 +boolean: isDescriptionFieldEmpty(String)
 +boolean: isNameFieldUnique(String)
@@ -128,6 +129,7 @@ class EditItemController {
 +EditItemController()
 
 +void: editItemValues(ActionEvent)
++void: transitionToItemList(ActionEvent)
 +boolean: descriptionFieldMaxValidation(String)
 +boolean: isDescriptionFieldEmpty(String)
 +boolean: isNameFieldUnique(String)

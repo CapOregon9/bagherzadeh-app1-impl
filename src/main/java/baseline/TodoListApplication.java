@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class TodoListApplication extends javafx.application.Application {
