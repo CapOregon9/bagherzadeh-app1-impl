@@ -22,7 +22,7 @@
             <VBox alignment="TOP_CENTER">
                <children>
                   <Label text="New Due Date" />
-                  <DatePicker fx:id="newDatePickerField" />
+                  <DatePicker fx:id="newDatePickerField" editable="false" />
                </children>
             </VBox>
          </children>
