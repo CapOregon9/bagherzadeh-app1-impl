@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 1 Solution
+ *  Copyright 2021 Alexander Bagherzadeh
+ */
+
 package baseline;
 
 import javafx.collections.FXCollections;
@@ -278,7 +283,7 @@ public class ItemListController {
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
         //initialize listView of items and create a listener selection detection on an observationList
-        //Fix spacing issue and set font using cell factory
+        //Fix spacing issue using cell factory
         itemsListView.setCellFactory(listView -> new ListFont());
         fillListView();
         itemsListView.setItems(list);

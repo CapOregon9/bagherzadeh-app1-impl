@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 1 Solution
+ *  Copyright 2021 Alexander Bagherzadeh
+ */
+
 package baseline;
 
 import javafx.geometry.Pos;
@@ -6,11 +11,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ListFont extends javafx.scene.control.ListCell<Item> {
-    //tried to use this to fix the spacing problem in list view. Was unsuccessful.
+    //fixes the spacing problem in list view.
     private Label label = new Label();
     private Label label2 = new Label();
     private Label label3 = new Label();
-    private HBox hBox = new HBox(64);
+    private HBox hBox = new HBox(16);
     private VBox vBoxName = new VBox(8);
     private VBox vBoxDate = new VBox(8);
     private VBox vBoxComplete = new VBox(8);
@@ -27,10 +32,10 @@ public class ListFont extends javafx.scene.control.ListCell<Item> {
         hBox.getChildren().add(vBoxName);
         hBox.getChildren().add(vBoxDate);
         hBox.getChildren().add(vBoxComplete);
-        vBoxComplete.setPrefWidth(128);
-        vBoxDate.setPrefWidth(64);
-        vBoxName.setPrefWidth(80);
-        vBoxName.setMaxWidth(80);
+        vBoxComplete.setPrefWidth(152);
+        vBoxDate.setPrefWidth(112);
+        vBoxName.setPrefWidth(104);
+        vBoxName.setMaxWidth(104);
     }
 
     @Override
