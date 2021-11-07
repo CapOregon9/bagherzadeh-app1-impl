@@ -51,6 +51,7 @@ public class Item {
     @Override
     public String toString() {
         //used for listView in the gui
-        return itemName;
+        //sets what the listView will display on each line
+        return String.format("%-15s%6s      %s%6s      %s", itemName, "|", dueDate, "|", (completed) ? "Completed":"Not Completed");
     }
 }

@@ -41,9 +41,9 @@ public class AddItemController {
 
     @FXML
     void saveItem(ActionEvent event) {
-        //cycle through list to get the specific list
-        //call function to add item
-
+        //use the item list passed through to add an item
+        //four boolean methods used to validate input from the user: 1. Name field not empty 2. Name field Unique 3. Description field not empty 4. Description field <= 256 in length
+        //if these are all true, then the item list edit item method is called to edit the current item
         if (!isNameFieldEmpty(newNameTextField.getText()) && isNameFieldUnique(newNameTextField.getText()) && !isDescriptionFieldEmpty(newDescriptionTextField.getText()) && descriptionFieldMaxValidation(newDescriptionTextField.getText())) {
             Stage stage;
             String date;
@@ -53,7 +53,7 @@ public class AddItemController {
                 date = newDatePickerField.getValue().format(DateTimeFormatter.ISO_DATE);
             }
             itemList.addItem(newNameTextField.getText(), newDescriptionTextField.getText(), date);
-            //return itemlist to main scene and load main scene with scene manager
+            //Transition back to main scene as well as sending the item list data back to it.
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemsList.fxml"));
             stage = (Stage)((Node) event.getSource()).getScene().getWindow();
             Parent root = null;
@@ -71,13 +71,16 @@ public class AddItemController {
             stage.show();
         } else {
             if (isNameFieldEmpty(newNameTextField.getText()) || !isNameFieldUnique(newNameTextField.getText())) {
+                //clears the name text field and sets a prompt if validation for the name didn't pass
                 newNameTextField.clear();
                 newNameTextField.setPromptText("Enter valid unique name!");
                 if (isDescriptionFieldEmpty(newDescriptionTextField.getText()) || !descriptionFieldMaxValidation(newDescriptionTextField.getText())) {
+                    //also clears the description text field and sets a prompt if validation for the description didn't pass
                     newDescriptionTextField.clear();
                     newDescriptionTextField.setPromptText("Enter a valid description that is no longer than 256 characters.");
                 }
             } else {
+                //clears the description text field and sets a prompt if validation for the description didn't pass when name did pass
                 newDescriptionTextField.clear();
                 newDescriptionTextField.setPromptText("Enter a valid description that is no longer than 256 characters.");
             }
@@ -86,27 +89,31 @@ public class AddItemController {
     }
 
     public boolean descriptionFieldMaxValidation(String description) {
+        //validates the length of the description to be <= 256 characters
         return description.length() <= 256;
     }
 
     public boolean isDescriptionFieldEmpty(String description) {
+        //checks if the description is empty
         return description.equals("");
     }
 
     public boolean isNameFieldUnique(String itemName) {
+        //returns the inverted value form the item list item exists function
+        //to verify if the item is unique
         return !itemList.itemExists(itemName);
     }
 
     public boolean isNameFieldEmpty(String itemName) {
+        //checks if the item name is empty
         return itemName.equals("");
     }
 
     public void initialize() {
-        //store passed in object of all lists
-        //store listname and item name as well
+        //set format for the date picker field using string converter to match the wanted format
+        //using the date formatter ISO_DATE will give this result
         newDatePickerField.setPromptText("YYYY-MM-DD");
         newDatePickerField.setConverter(new StringConverter<>() {
-
             @Override
             public String toString(LocalDate date) {
                 if (date != null) {
@@ -115,7 +122,6 @@ public class AddItemController {
                     return "";
                 }
             }
-
             @Override
             public LocalDate fromString(String string) {
                 if (string != null && !string.isEmpty()) {

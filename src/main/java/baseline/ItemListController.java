@@ -8,30 +8,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Formatter;
-import java.util.FormatterClosedException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class ItemListController {
+    //create item list to store all item data
     private ItemList itemList = new ItemList();
-    Stage stage;
+    //create a stage object to store the current stage when transferring to other controllers as well as for the file chooser
+    private Stage stage;
+    //create observable list that mirrors the item list and is linked to the list view
     private final ObservableList<Item> list = FXCollections.observableArrayList();
+    //create a file chooser to be used in opening and saving the text files of an item list
     private FileChooser fileChooser = new FileChooser();
 
     @FXML
@@ -42,6 +39,9 @@ public class ItemListController {
 
     @FXML
     private TextField itemNameTextField;
+
+    @FXML
+    private Button sortListButton;
 
     @FXML
     private Button addItemButton;
@@ -83,13 +83,15 @@ public class ItemListController {
     private Button importFileButton;
 
     public void itemListDataPass(ItemList itemList) {
+        //Receive the item list from another controller object (either edit item or add item controller)
         this.itemList = itemList;
         fillListView();
     }
 
     @FXML
-    void ExportToFile(ActionEvent event) {
-        //waiting for scene manager info
+    void exportToFile(ActionEvent event) {
+        //Save the file using a file chooser that uses the same stage
+        //call method to save file only if a file is chosen
         fileChooser.setTitle("Save File");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File file = fileChooser.showSaveDialog(stage);
@@ -99,8 +101,9 @@ public class ItemListController {
     }
 
     @FXML
-    void ImportFromFile(ActionEvent event) {
-        //waiting for scene manager info
+    void importFromFile(ActionEvent event) {
+        //Open a file using a file chooser that uses the same stage
+        //call method to open file only if a file is chosen
         fileChooser.setTitle("Open File");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
@@ -112,7 +115,7 @@ public class ItemListController {
     @FXML
     void addNewItem(ActionEvent event) {
         //move to add item scene passing over all lists as well
-        //pass in value for the selected item as well as the selected list
+        //pass in value for the item list
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddItem.fxml"));
 
         Parent root = null;
@@ -129,10 +132,6 @@ public class ItemListController {
         stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
-
-      //  itemList.addItem(itemNameTextField.getText(), itemDescriptionTextField.getText(), itemDateTextField.getText());
-      //  list.add(itemList.getItem(itemNameTextField.getText()));
-      //  itemsListView.setItems(list);
     }
 
     @FXML
@@ -149,7 +148,7 @@ public class ItemListController {
 
     @FXML
     void closeList(ActionEvent event) {
-        //return to main scene of all lists
+        //close application
         stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -157,7 +156,7 @@ public class ItemListController {
     @FXML
     void editSelectedItem(ActionEvent event) {
         //move to edit item scene passing over all lists as well
-        //pass in value for the selected item as well as the selected list
+        //pass in value for the selected item as well as the item list
         if (!itemsListView.getSelectionModel().isEmpty()) {
             String itemName = itemsListView.getSelectionModel().getSelectedItem().getItemName();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditItem.fxml"));
@@ -180,6 +179,17 @@ public class ItemListController {
     }
 
     @FXML
+    void sortListByDate(ActionEvent event) {
+        //calls the sort list method
+        sortList();
+    }
+
+    void sortList() {
+        //sorts items by due date
+        list.sort(Comparator.comparing(Item::getDueDate));
+    }
+
+    @FXML
     void removeSelectedItem(ActionEvent event) {
         //check listener to get name of what item is selected
         //call method of itemList to remove item from list
@@ -187,16 +197,25 @@ public class ItemListController {
         if (!itemsListView.getSelectionModel().isEmpty()) {
             itemList.removeItem(itemsListView.getSelectionModel().getSelectedItem().getItemName());
             list.remove(itemsListView.getSelectionModel().getSelectedItem());
-
+            resetItemValues();
         }
+    }
+
+    public void resetItemValues() {
+        //resets the display information for an item
+        itemNameTextField.clear();
+        itemDescriptionTextField.clear();
+        itemDateTextField.clear();
+        completedCheckBox.setSelected(false);
     }
 
     @FXML
     void selectItemsToShow(ActionEvent event) {
         //cycle between different filters
-        //radio buttons will give a value 0, 1, or 2
-        //compare that value with the completed value of each item
-        //update listView
+        //radio buttons will give a value All, Completed, or Not Completed
+        //use this to chose which method to run
+        //each method call updates the observable list which then changes the list view
+            resetItemValues();
             if (completedToggleGroup.getSelectedToggle().getUserData().equals("All")){
                 showAllItems();
             }
@@ -208,6 +227,7 @@ public class ItemListController {
     }
 
     public void showIncompleteItems() {
+        //adds only incomplete items to observable list after clearing it
         list.clear();
         for (Item item : itemList.getToDoList()) {
             if (!item.getCompleted()) {
@@ -217,6 +237,7 @@ public class ItemListController {
     }
 
     public void showCompletedItems() {
+        //adds only completed items to observable list after clearing it
         list.clear();
         for (Item item : itemList.getToDoList()) {
             if (item.getCompleted()) {
@@ -226,6 +247,7 @@ public class ItemListController {
     }
 
     public void showAllItems() {
+        //adds all items to observable list after clearing it
         list.clear();
         list.addAll(itemList.getToDoList());
     }
@@ -237,23 +259,34 @@ public class ItemListController {
 
     @FXML
     void clearAllItems(ActionEvent event) {
+        //clears all items from the item list and observable list
         itemList.clearAllItems();
         list.clear();
         itemsListView.setItems(list);
+        resetItemValues();
     }
 
     public void initialize() {
-        //use passed in title to know what list to access
-        //initialize listView of items and create a listener selection detection on an observationList
+        //sets the user data of each radio button to be used to distinguish in toggle group method
         showAllItemsRadioButton.setUserData("All");
         showCompleteItemsRadioButton.setUserData("Completed");
         showIncompleteItemsRadioButton.setUserData("Not Completed");
+        //sets the display fields of item information to not be visible by the mouse (can't click them)
+        itemNameTextField.setMouseTransparent(true);
+        itemDateTextField.setMouseTransparent(true);
+        itemDescriptionTextField.setMouseTransparent(true);
 
+        //initializes file chooser available extensions
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
+        //initialize listView of items and create a listener selection detection on an observationList
+        //Fix spacing issue and set font using cell factory
+        itemsListView.setCellFactory(listView -> new ListFont());
         fillListView();
         itemsListView.setItems(list);
 
+        //listener only changes data if something is selected in order to remove null pointer exception
+        //when swapping what is displayed with the radio buttons
         itemsListView.getSelectionModel().selectedItemProperty().addListener(
                 (ov, oldValue, newValue) -> {
                     if (!itemsListView.getSelectionModel().isEmpty()) {
@@ -266,23 +299,23 @@ public class ItemListController {
     }
 
     public void fillListView() {
+        //adds all items from the item list to the observable list connected to the listview
         list.addAll(itemList.getToDoList());
     }
 
 
     public void openFile(File file) {
-        int tempComplete;
-        String tempName;
+        //opens all items from a text file using a scanner object
+        //file is passed in from the file made by the file chooser
         itemList = new ItemList();
         try (Scanner inputLine = new Scanner(file)) {
             while (inputLine.hasNextLine()) {
-                String line = inputLine.nextLine();
-                try (Scanner inputString = new Scanner(line)) {
-                    tempName = inputString.next();
-                    itemList.addItem(tempName, inputString.next(), inputString.next());
-                    tempComplete = Integer.parseInt(inputString.next());
-                    itemList.setItemCompletedState(tempName, tempComplete == 1);
-                }
+                String name = inputLine.nextLine();
+                String description = inputLine.nextLine();
+                String date = inputLine.nextLine();
+                int complete = Integer.parseInt(inputLine.nextLine());
+                itemList.addItem(name, description, date);
+                itemList.setItemCompletedState(name, complete == 1);
             }
         } catch (NoSuchElementException | IllegalStateException | FileNotFoundException e) {
             System.out.println("Could not read file.");
@@ -292,10 +325,11 @@ public class ItemListController {
     }
 
     public void saveFile(String fileURI) {
+        //saves all items to a text file using formatter object
+        //file location is passed in via a string from the file made by the file chooser
             try (Formatter output = new Formatter(fileURI)) {
                 for (Item item:itemList.getToDoList()) {
                     saveLineToFile(item, output);
-                    output.format("%n");
                 }
             } catch (SecurityException | FileNotFoundException | FormatterClosedException e) {
                 System.out.println("Could not write file.");
@@ -303,10 +337,11 @@ public class ItemListController {
     }
 
     public void saveLineToFile(Item item, Formatter output) {
+        //Formats a single item to the text file
         int tempComplete = 0;
         if (item.getCompleted()){
             tempComplete = 1;
         }
-        output.format("%s %s %s %d", item.getItemName(), item.getItemDescription(), item.getDueDate(), tempComplete);
+        output.format("%s%n%s%n%s%n%d%n", item.getItemName(), item.getItemDescription(), item.getDueDate(), tempComplete);
     }
 }

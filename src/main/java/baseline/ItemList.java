@@ -4,20 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemList {
-    //Stores the info of one to-do list
-    private String listName;
-    List<Item> toDoList = new ArrayList<>();
+    //Stores the info of the to-do-list
+    private List<Item> toDoList = new ArrayList<>();
 
     public ItemList() {
         //initialized  when new list is made
     }
 
     public void addItem(String newItemName, String newDescription, String newDate) {
-        //use name to add item from arraylist
+        //used passed in values of name description and date to add a new item to the list
         toDoList.add(new Item(newItemName, newDescription, newDate, false));
     }
 
     public Item getItem(String name) {
+        //returns an item when the item name equals the passed in name
+        //this will never return null because of using the selection property from the list view to get the item name
         for (Item item : toDoList) {
             if (item.getItemName().equals(name)) {
                 return item;
@@ -38,6 +39,9 @@ public class ItemList {
     }
 
     public boolean itemExists(String itemName) {
+        //cycle through the items in the list
+        //return true if the item name matches the passed in name
+        //otherwise false
         for (Item item : toDoList) {
             if (item.getItemName().equals(itemName)) {
                 return true;
@@ -53,6 +57,7 @@ public class ItemList {
 
     public void editItem(String name, String newItemName, String newDescription, String newDate) {
         //use name to find specific item and use setter methods of class Item to change info of the item
+        //using the passed in parameters for the fields
         for (Item item : toDoList) {
             if (item.getItemName().equals(name)) {
                 item.setItemName(newItemName);
@@ -63,29 +68,12 @@ public class ItemList {
     }
 
     public void clearAllItems() {
+        //clears the list of items with built-in function
         toDoList.clear();
     }
 
-    //used to access info for controllers
-    public String getListName() {
-        return listName;
-    }
-
-    public void setListName(String listName) {
-        this.listName = listName;
-    }
-
     public List<Item> getToDoList() {
+        //returns the toDoList to be used in other methods, mainly in opening and saving to a file
         return toDoList;
-    }
-
-    public void setToDoList(List<Item> toDoList) {
-        this.toDoList = toDoList;
-    }
-
-    @Override
-    public String toString() {
-        //used for displaying in listview
-        return listName;
     }
 }

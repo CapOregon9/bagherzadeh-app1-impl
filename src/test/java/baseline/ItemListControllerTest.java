@@ -26,24 +26,28 @@ class ItemListControllerTest {
 
     @Test
     void showIncompleteItems() {
+        //Tests showing only incomplete items and also verifies that the observable list in the controller successfully mirrors the item list appropriately
         itemListController.showIncompleteItems();
         assertEquals(2, itemListController.getList().size());
     }
 
     @Test
     void showCompletedItems() {
+        //Tests showing only complete items and also verifies that the observable list in the controller successfully mirrors the item list appropriately
         itemListController.showCompletedItems();
         assertEquals(1, itemListController.getList().size());
     }
 
     @Test
     void showAllItems() {
+        //Tests showing all items and also verifies that the observable list in the controller successfully mirrors the item list appropriately
         itemListController.showAllItems();
         assertEquals(3, itemListController.getList().size());
     }
 
     @Test
     void saveFile() {
+        //tests if the file is created when running the save file method
         //the file location and name are being handled by the file chooser javafx object
         itemListController.saveFile("D:\\Documents\\TestSave.txt");
         boolean value = new File("D:\\Documents\\TestSave.txt").exists();
@@ -52,7 +56,8 @@ class ItemListControllerTest {
 
     @Test
     void openFile() {
-        //the file location and name are being handled by the file chooser javafx object
+        //tests if the size of the list was changed after opening the file.
+        //file location and name are being handled by the file chooser javafx object
         //the list size would be more than three if the file was not overwriting the current data
         itemListController.openFile(new File("D:\\Documents\\TestSave.txt"));
         assertEquals(3, itemListController.getList().size());

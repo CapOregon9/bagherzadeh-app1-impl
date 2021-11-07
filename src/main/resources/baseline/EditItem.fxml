@@ -21,7 +21,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER">
                <children>
-                  <Label text="New Date" />
+                  <Label text="New Due Date" />
                   <DatePicker fx:id="newDatePickerField" />
                </children>
             </VBox>
