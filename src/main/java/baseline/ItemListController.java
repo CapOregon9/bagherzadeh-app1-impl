@@ -5,6 +5,7 @@
 
 package baseline;
 
+import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -65,6 +66,9 @@ public class ItemListController {
     private Button editSelectedItemButton;
 
     @FXML
+    private Button helpButton;
+
+    @FXML
     private ListView<Item> itemsListView;
 
     @FXML
@@ -85,8 +89,13 @@ public class ItemListController {
     @FXML
     private Button importFileButton;
 
-    public void itemListDataPass(ItemList itemList) {
+    private HostServices hostServices;
+
+    private Hyperlink hyperlink;
+
+    public void itemListDataPass(ItemList itemList, HostServices hostServices) {
         //Receive the item list from another controller object (either edit item or add item controller)
+        this.hostServices = hostServices;
         this.itemList = itemList;
         fillListView();
     }
@@ -128,7 +137,7 @@ public class ItemListController {
             System.out.println("Could not load add item fxml.");
         }
         AddItemController controller = fxmlLoader.getController();
-        controller.itemListDataPass(itemList);
+        controller.itemListDataPass(itemList, hostServices);
         Scene scene = new Scene(root);
         JMetro jMetro = new JMetro(Style.LIGHT);
         jMetro.setScene(scene);
@@ -171,7 +180,7 @@ public class ItemListController {
                 System.out.println("Could not load add item fxml.");
             }
             EditItemController controller = fxmlLoader.getController();
-            controller.itemListDataPass(itemList, itemName);
+            controller.itemListDataPass(itemList, itemName, hostServices);
             Scene scene = new Scene(root);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(scene);
@@ -346,5 +355,14 @@ public class ItemListController {
             tempComplete = 1;
         }
         output.format("%s%n%s%n%s%n%d%n", item.getItemName(), item.getItemDescription(), item.getDueDate(), tempComplete);
+    }
+
+    @FXML
+    void openUserGuide(ActionEvent event) {
+        hostServices.showDocument("docs\\ItemListUserGuide.pdf");
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
     }
 }

@@ -5,6 +5,7 @@
 
 package baseline;
 
+import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,6 +42,8 @@ public class EditItemController {
 
     @FXML
     private Button saveChangesButton;
+
+    private HostServices hostServices;
 
     //unused controller which is needed when changing scenes (caused a null pointer exception without a specified controller)
     public EditItemController() {
@@ -85,7 +88,7 @@ public class EditItemController {
             System.out.println("Could not load add item fxml.");
         }
         ItemListController controller = fxmlLoader.getController();
-        controller.itemListDataPass(itemList);
+        controller.itemListDataPass(itemList, hostServices);
         Scene scene = new Scene(root);
         JMetro jMetro = new JMetro(Style.LIGHT);
         jMetro.setScene(scene);
@@ -143,8 +146,9 @@ public class EditItemController {
         });
     }
 
-    public void itemListDataPass(ItemList itemList, String itemName) {
+    public void itemListDataPass(ItemList itemList, String itemName, HostServices hostServices) {
         //receives the item list and the item name from another controller and calls the method to set the field values
+        this.hostServices = hostServices;
         this.itemList = itemList;
         this.itemName = itemName;
         setStageTexts();

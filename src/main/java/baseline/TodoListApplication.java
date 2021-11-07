@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class TodoListApplication extends javafx.application.Application {
@@ -23,7 +24,15 @@ public class TodoListApplication extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws Exception {
         //opens the initial scene and used the JMetro javafx skin to modernize the look of the application.
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ItemsList.fxml")));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("ItemsList.fxml")));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.out.println("Could not load item list fxml.");
+        }
+        ItemListController itemListController = loader.getController();
+        itemListController.setHostServices(getHostServices());
         Scene scene = new Scene(root);
         JMetro jMetro = new JMetro(Style.LIGHT);
         jMetro.setScene(scene);

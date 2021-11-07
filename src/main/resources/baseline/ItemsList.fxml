@@ -41,6 +41,7 @@
                      <children>
                         <Button fx:id="editSelectedItemButton" mnemonicParsing="false" onAction="#editSelectedItem" text="Edit Selected Item" />
                         <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addNewItem" text="Add Item" />
+                        <Button fx:id="helpButton" mnemonicParsing="false" onAction="#openUserGuide" text="Help" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_RIGHT" spacing="8.0">

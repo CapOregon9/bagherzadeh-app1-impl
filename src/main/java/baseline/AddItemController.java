@@ -5,6 +5,7 @@
 
 package baseline;
 
+import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,7 +41,10 @@ public class AddItemController {
     @FXML
     private Button saveItemButton;
 
-    public void itemListDataPass(ItemList itemList) {
+    private HostServices hostServices;
+
+    public void itemListDataPass(ItemList itemList, HostServices hostServices) {
+        this.hostServices = hostServices;
         this.itemList = itemList;
     }
 
@@ -89,7 +93,7 @@ public class AddItemController {
             System.out.println("Could not load item list fxml.");
         }
         ItemListController controller = fxmlLoader.getController();
-        controller.itemListDataPass(itemList);
+        controller.itemListDataPass(itemList, hostServices);
         Scene scene = new Scene(root);
         JMetro jMetro = new JMetro(Style.LIGHT);
         jMetro.setScene(scene);

@@ -41,6 +41,4 @@ class EditItemControllerTest {
         //True if the field is empty
         assertTrue(editItemController.isDescriptionFieldEmpty(""));
     }
-
-
 }

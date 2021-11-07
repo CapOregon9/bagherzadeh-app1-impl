@@ -108,7 +108,7 @@ class AddItemController {
 -TextField: newNameTextField
 -Button: saveItemButton
 
-+void: itemListDataPass(ItemList)
++void: itemListDataPass(ItemList, HostServices)
 +void: saveItem(ActionEvent)
 +void: transitionToItemList(ActionEvent)
 +boolean: descriptionFieldMaxValidation(String)
@@ -116,6 +116,7 @@ class AddItemController {
 +boolean: isNameFieldUnique(String)
 +boolean: isNameFieldEmpty(String)
 +void: initialize()
++void setHostServices(HostServices)
 }
 
 class EditItemController {
@@ -135,7 +136,7 @@ class EditItemController {
 +boolean: isNameFieldUnique(String)
 +boolean: isNameFieldEmpty(String)
 +void: initialize()
-+void: itemListDataPass(ItemList, String)
++void: itemListDataPass(ItemList, String, HostServices)
 +void: setStageTexts()
 }
 

@@ -5,6 +5,8 @@
 
 package baseline;
 
+import com.sun.javafx.application.HostServicesDelegate;
+import javafx.application.HostServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,11 +23,12 @@ class ItemListControllerTest {
         //items by default are set to false for being completed
         itemListController = new ItemListController();
         itemList = new ItemList();
+        HostServices hostServices = null;
         itemList.addItem("TestItem1", "TestDescription", "TestDate");
         itemList.addItem("TestItem2", "TestDescription", "TestDate");
         itemList.setItemCompletedState("TestItem2", true);
         itemList.addItem("TestItem3", "TestDescription", "TestDate");
-        itemListController.itemListDataPass(itemList);
+        itemListController.itemListDataPass(itemList, hostServices);
     }
 
 
