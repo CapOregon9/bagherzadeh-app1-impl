@@ -55,8 +55,14 @@ public class EditItemController {
         //use the item list and item name passed through to edit a specific item
         //four boolean methods used to validate input from the user: 1. Name field not empty 2. Name field Unique 3. Description field not empty 4. Description field <= 256 in length
         //if these are all true, then the item list edit item method is called to edit the current item
+        String date;
         if (!isNameFieldEmpty(newNameTextField.getText()) && isNameFieldUnique(newNameTextField.getText()) && !isDescriptionFieldEmpty(newDescriptionTextField.getText()) && descriptionFieldMaxValidation(newDescriptionTextField.getText())) {
-            itemList.editItem(itemName, newNameTextField.getText(), newDescriptionTextField.getText(), newDatePickerField.getValue().format(DateTimeFormatter.ISO_DATE));
+            if (newDatePickerField.getValue() == null) {
+                date = "";
+            } else {
+                date = newDatePickerField.getValue().format(DateTimeFormatter.ISO_DATE);
+            }
+            itemList.editItem(itemName, newNameTextField.getText(), newDescriptionTextField.getText(), date);
             //Transition back to main scene as well as sending the item list data back to it.
             transitionToItemList(event);
         } else {
